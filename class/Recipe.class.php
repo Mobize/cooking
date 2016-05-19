@@ -2,15 +2,34 @@
 
 class Recipe extends Model {
 
-	public $id;
-	public $type;
-	public $title;
-	public $ingredients;
-	public $content;
-	public $picture;
-	public $date;
+	private $id;
+	private $type;
+	private $title;
+	private $ingredients;
+	private $content;
+	private $picture;
+	private $date;
 
 	public static $default_picture = 'img/recipe.png';
+
+	const RECIP_TYPE_DEFAULT = 0;
+	const RECIP_TYPE_CAKE = 1;
+	const RECIP_TYPE_FAST_FOOD = 2;
+	const RECIP_TYPE_SOUP = 3;
+
+	public static $type_labels = array(
+		self::RECIP_TYPE_DEFAULT => 'cuisine',
+		self::RECIP_TYPE_CAKE => 'gâteaux',
+		self::RECIP_TYPE_FAST_FOOD => 'fast food',
+		self::RECIP_TYPE_SOUP => 'soupe',
+	);
+
+	public static function getTypeLabel($type) {
+		if (isset(self::$type_labels[$type])) {
+			return self::$type_labels[$type];
+		}
+		return self::$type_labels[self::RECIP_TYPE_DEFAULT];
+	}
 
 	/* Getters */
 	public function getId() {
@@ -23,9 +42,12 @@ class Recipe extends Model {
 		return ucfirst($this->title);
 	}
 	public function getIngredients() {
-		return $this->ingredients;
+		return nl2br($this->ingredients);
 	}
 	public function getContent($max_length = 0, $end = '...') {
+		if ($max_length === 0) {
+			return nl2br($this->content);
+		}
 		return Utils::cutString($this->content, $max_length, $end);
 	}
 	public function getPicture($default = '') {

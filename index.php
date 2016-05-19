@@ -3,8 +3,7 @@ require_once 'partials/header.php';
 
 $random_recipes = Recipe::getList('SELECT * FROM recipe ORDER BY RAND() LIMIT 3');
 
-Utils::debug($random_recipes);
-
+//Utils::debug($random_recipes);
 ?>
 
 		<div class="row">
@@ -33,12 +32,12 @@ Utils::debug($random_recipes);
 		<?php foreach($random_recipes as $key => $recipe) { ?>
 		<div class="row featurette">
 			<div class="col-md-7 <?= $key % 2 === 0 ? 'pull-left' : 'pull-right' ?>">
-				<h2 class="featurette-heading">Recipe title</h2>
-				<p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in felis magna. Donec arcu ipsum, commodo non sollicitudin at, ultrices sit amet metus. </p>
-				<a class="btn btn-primary" href="recipe.php" role="button">Voir la recette &raquo;</a>
+				<h2 class="featurette-heading"><?= $recipe->title ?></h2>
+				<p class="lead"><?= $recipe->getContent(50) ?></p>
+				<a class="btn btn-primary" href="recipe.php?id=<?= $recipe->id ?>" role="button">Voir la recette &raquo;</a>
 			</div>
 			<div class="col-md-5 <?= $key % 2 === 0 ? 'pull-right' : 'pull-left' ?>">
-				<img class="featurette-image img-responsive center-block" src="img/recipe.png" height="333" width="500" alt="">
+				<img class="featurette-image img-responsive center-block" src="<?= $recipe->picture ?>" height="333" width="500" alt="">
 			</div>
 		</div>
 		<?php } ?>
