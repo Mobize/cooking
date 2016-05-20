@@ -96,4 +96,35 @@ class Recipe extends Model {
 		$this->date = $date;
 	}
 
+
+	/* Search */
+	public static function search($input) {
+
+		if (empty($input)) {
+			return new Search();
+		}
+
+		$entity = self::getClass();
+		$quick_search = !empty($input['search']) ? $input['search'] : '';
+
+		$search_filters = array();
+		if (!empty($quick_search)) {
+			$separator = 'OR';
+			$search_filters = array(
+				'title' => '%'.$quick_search.'%',
+				'ingredients' => '%'.$quick_search.'%',
+				'content' => '%'.$quick_search.'%'
+			);
+		} else {
+			$separator = 'AND';
+			foreach($input as $key => $value) {
+				if (!empty($value) && property_exists($entity, $key)) {
+					$search_filters[$key] = (is_numeric($value) ? $value : '%'.$value.'%');
+				}
+			}
+		}
+
+		return new Search($entity, $input, $search_filters, $separator);
+	}
+
 }
