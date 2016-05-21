@@ -5,7 +5,6 @@ $firstname = !empty($_POST['firstname']) ? strip_tags($_POST['firstname']) : '';
 $lastname = !empty($_POST['lastname']) ? strip_tags($_POST['lastname']) : '';
 $email = !empty($_POST['email']) ? strip_tags($_POST['email']) : '';
 $message = !empty($_POST['message']) ? strip_tags($_POST['message']) : '';
-$newsletter = !empty($_POST['newsletter']) ? intval($_POST['newsletter']) : 0;
 
 $errors = array();
 $result = '';
