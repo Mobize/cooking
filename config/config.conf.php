@@ -1,5 +1,5 @@
 <?php
-require_once 'config/autoload.conf.php';
+require_once __DIR__.'/autoload.conf.php';
 
 $current_page = basename($_SERVER['PHP_SELF']); // Ex: index.php
 

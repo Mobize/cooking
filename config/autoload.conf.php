@@ -1,7 +1,7 @@
 <?php
 
 function autoLoader($class_name) {
-	$class_path = 'class/'.$class_name.'.class.php';
+	$class_path = __DIR__.'/../class/'.$class_name.'.class.php';
 	if (file_exists($class_path)) {
 		include $class_path;
 		return true;
