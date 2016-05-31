@@ -30,7 +30,7 @@ $class = '<?php'.PHP_EOL;
 $class .= 'class '.$class_name.' {'.PHP_EOL.PHP_EOL;
 
 foreach($columns as $column) {
-	$class .= "\tprivate $".$column.';'.PHP_EOL;
+	$class .= "\tprotected $".$column.';'.PHP_EOL;
 }
 $class .= PHP_EOL;
 
