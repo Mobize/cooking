@@ -6,8 +6,15 @@ $lastname = !empty($_POST['lastname']) ? strip_tags($_POST['lastname']) : '';
 $email = !empty($_POST['email']) ? strip_tags($_POST['email']) : '';
 $message = !empty($_POST['message']) ? strip_tags($_POST['message']) : '';
 
+/*
+foreach($contact->getProperties() as $field) {
+    $$field = !empty($_POST[$field]) ? strip_tags($_POST[$field]) : '';
+}
+*/
+
 $errors = array();
 $result = '';
+
 
 if (!empty($_POST)) {
 

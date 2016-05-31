@@ -2,12 +2,12 @@
 
 class Contact extends Model {
 
-	private $id;
-	private $firstname;
-	private $lastname;
-	private $email;
-	private $message;
-	private $date;
+	protected $id;
+	protected $firstname;
+	protected $lastname;
+	protected $email;
+	protected $message;
+	protected $date;
 
 	/* Getters */
 	public function getId() {
