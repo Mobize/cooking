@@ -1,48 +1,67 @@
-<?php
-require_once 'partials/header.php';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" href="img/favicon.ico">
 
-Utils::debug($_GET);
+	<title>Quick Cooking</title>
 
-$search = !empty($_GET['search']) ? strip_tags($_GET['search']) : '';
-$advanced_search = !empty($_GET['advanced_search']) ? intval($_GET['advanced_search']) : 0;
-$recipe = !empty($_GET['recipe']) ? strip_tags($_GET['recipe']) : '';
-$type = isset($_GET['type']) && $_GET['type'] != -1 ? intval($_GET['type']) : -1;
-$ingredients = !empty($_GET['ingredients']) ? strip_tags($_GET['ingredients']) : '';
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
 
-$search_results = array();
-$count_search_results = 0;
+</head>
+<body>
+	<div class="navbar-wrapper">
+		<div class="container">
 
-if (!empty($search)) {
+			<nav class="navbar navbar-inverse navbar-static-top">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="index.php">Quick Cooking</a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="index.php">Accueil</a></li>
+							<li><a href="random.php">Recette aléatoire</a></li>
+							<li><a href="search.php">Recherche</a></li>
+							<li><a href="contact.php">Contact</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Les recettes <span class="caret"></span></a>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="recipes.php?type=1">Les gateaux</a></li>
+									<li><a href="recipes.php?type=2">La fast-food</a></li>
+									<li><a href="recipes.php?type=3">Les soupes</a></li>
+								</ul>
+							</li>
+						</ul>
+						<form class="navbar-form navbar-right" action="search.php" method="GET">
+							<div class="input-group">
+								<input name="search" type="text" class="form-control" placeholder="Recherche rapide...">
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="submit">
+										<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+									</button>
+								</span>
+							</div>
+						</form>
+					</div>
+				</div>
+			</nav>
 
-	$search_results = Recipe::getList('SELECT * FROM recipe WHERE title LIKE :search OR content LIKE :search OR ingredients LIKE :search', array(':search' => '%'.$search.'%'));
+		</div>
+	</div>
 
-	$count_search_results = count($search_results);
-
-} else if (!empty($advanced_search)) {
-
-	$sql = 'SELECT * FROM recipe WHERE 1 ';
-
-	$bindings = array();
-	if (!empty($recipe)) {
-		$sql .= 'AND (title LIKE :recipe OR content LIKE :recipe) ';
-		$bindings[':recipe'] = '%'.$recipe.'%';
-	}
-	if ($type != -1) {
-		$sql .= 'AND type = :type ';
-		$bindings[':type'] = $type;
-	}
-	if (!empty($ingredients)) {
-		$sql .= 'AND ingredients LIKE :ingredients ';
-		$bindings[':ingredients'] = '%'.$ingredients.'%';
-	}
-
-	//Utils::debug($sql);
-	//Utils::debug($bindings);
-
-	$search_results = Recipe::getList($sql, $bindings);
-	$count_search_results = count($search_results);
-}
-?>
+	<div class="container marketing">
 
 		<h1>Recherche</h1>
 
@@ -54,31 +73,24 @@ if (!empty($search)) {
 
 			<div class="form-group">
 				<label for="recipe">Nom de recette</label>
-				<input type="text" id="recipe" name="recipe" class="form-control" placeholder="Tarte à la framboise" value="<?= $recipe ?>">
+				<input type="text" id="recipe" name="recipe" class="form-control" placeholder="Tarte à la framboise" value="">
 			</div>
 
 			<div class="form-group">
 				<label for="type">Type de recette</label>
 				<select id="type" name="type" class="form-control">
-					<option value="-1">...</option>
-					<?php
-					$type_labels = Recipe::$type_labels;
-
-					foreach($type_labels as $type_id => $type_label) {
-						$selected = '';
-						if ($type === $type_id) {
-							$selected = 'selected';
-						}
-						//$selected = $type === $type_id ? 'selected' : '';
-					?>
-					<option <?= $selected ?> value="<?= $type_id ?>"><?= ucfirst($type_label) ?></option>
-					<?php } ?>
+					<option value="">...</option>
+					<option value="1">Gateau</option>
+					<option value="2">Fast-food</option>
+					<option value="3">Soupe</option>
 				</select>
 			</div>
 
 			<div class="form-group">
-				<label for="ingredients">Ingredient(s)</label>
-				<input type="text" id="ingredients" name="ingredients" class="form-control" placeholder="farine, sucre, poulet..." value="<?= $ingredients ?>">
+				<label for="ingredient">Ingredient</label>
+				<select id="ingredient" name="ingredient" class="form-control">
+					<option value="">...</option>
+				</select>
 			</div>
 
 			<div class="form-group">
@@ -88,31 +100,17 @@ if (!empty($search)) {
 			</div>
 		</form>
 
-		<?php if (!empty($search) || !empty($advanced_search)) { ?>
+		<hr>
 
-			<hr>
+		<footer>
+			<p class="pull-right"><a href="#">Haut de page</a></p>
+			<p>&copy; 2014 Quick Cooking</p>
+		</footer>
 
-			<h2>
-				<?= $count_search_results ?> résultat(s) pour la recherche
-				<?php if (!empty($search)) { ?>
-				&laquo;<?= $search ?>&raquo;
-				<?php } ?>
-			</h2>
+	</div><!-- /.container -->
 
-			<div class="search-results list-group">
-				<?php
-				foreach($search_results as $key => $recipe) {
-				?>
-				<a href="recipe.php?id=<?= $recipe->id ?>" class="list-group-item clearfix">
-					<img width="50" height="65" src="<?= $recipe->picture ?>" class="pull-left" style="margin-right: 20px">
-					<div class="content pull-left">
-						<h4 class="list-group-item-heading"><?= $recipe->title ?></h4>
-    					<p class="list-group-item-text"><?= $recipe->getContent(50) ?></p>
-					</div>
-				</a>
-				<?php } ?>
-			</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
-		<?php } ?>
-
-<?php require_once 'partials/footer.php' ?>
+</body>
+</html>
